@@ -1,35 +1,21 @@
 import React, { Component } from "react";
 import LazyHero from "react-lazy-hero";
+import "./App.css";
+import { Header, Label, Image } from "semantic-ui-react";
 
 class HeroHeader extends Component {
-  state = { images: [], title: "", imageSRC: "", count: 0 };
+  state = { images: [], title: "", imageSRC: "", count: 0, creator: {} };
 
   async componentWillReceiveProps(newProps) {
     console.log("New Props on the hero", newProps);
 
-    await this.setState({ images: newProps.images, title: newProps.title });
+    await this.setState({
+      images: newProps.images,
+      title: newProps.title,
+      creator: newProps.creator
+    });
     console.log("did await", this.state);
   }
-
-  // changeHeroImage = () => {
-  //   // do whatever you like here
-  //   var images = IMAGES; //this.state.images;
-  //   var count = this.state.count;
-  //   var a = this;
-  //   var url = "";
-  //
-  //   if (count >= images.length) {
-  //     count = 0;
-  //   }
-  //   images.map(function(image, index) {
-  //     if (index == count) {
-  //       url = image.url;
-  //     }
-  //   });
-  //   count++;
-  //   this.setState({ imageSRC: url, count: count });
-  //   setTimeout(this.changeHeroImage, 5000);
-  // };
 
   render() {
     return (
@@ -42,9 +28,13 @@ class HeroHeader extends Component {
           className="App"
           transitionDuration={600}
           transitionTimingFunction="ease-in-out">
-          <h1 className="hero-text">Dylan, "can't fire"; da bitch</h1> //{
-            this.state.title
-          }
+          <h1 className="hero-text">{this.state.title}</h1>
+          <Label
+            attached="bottom right"
+            style={{ marginBottom: 5, marginRight: 5 }}>
+            <Image avatar src={this.state.creator.profile_image_url} />
+            {this.state.creator.name}
+          </Label>
         </LazyHero>
 
         {/* ... */}

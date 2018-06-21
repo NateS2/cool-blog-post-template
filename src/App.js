@@ -1,5 +1,7 @@
 import _ from "lodash";
 import React, { Component } from "react";
+import HeroHeader from "./heroHeader";
+import zupage from "zupage";
 import {
   Container,
   Divider,
@@ -88,8 +90,16 @@ const Paragraph = () => (
 export default class StickyLayout extends Component {
   state = {
     menuFixed: false,
-    overlayFixed: false
+    overlayFixed: false,
+    post: { body: "", images: [], title: "", creator: {} }
   };
+
+  async componentDidMount() {
+    // const post = await zupage.getPost('4122d340-7bdb-4996-8400-f3d582d84280');
+    const post = await zupage.getCurrentPost();
+    this.setState({ post });
+    console.log("Response!", post);
+  }
 
   handleOverlayRef = c => {
     const { overlayRect } = this.state;
@@ -111,6 +121,7 @@ export default class StickyLayout extends Component {
 
   render() {
     const { menuFixed, overlayFixed, overlayRect } = this.state;
+    const { images, body, title, creator } = this.state.post;
 
     return (
       <div>
@@ -122,7 +133,7 @@ export default class StickyLayout extends Component {
             background: #fff;
           }
         `}</style>
-
+        <HeroHeader title={title} creator={creator} />
         <Container text style={{ marginTop: "2em" }}>
           <Header as="h1">Sticky Example</Header>
           <p>

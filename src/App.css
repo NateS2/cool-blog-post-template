@@ -41,3 +41,7 @@
   transform: translate(-50%, -50%);
   color: white;
 }
+
+.paragraph-spacing {
+  white-space: pre-line;
+}

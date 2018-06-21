@@ -115,6 +115,12 @@ export default class StickyLayout extends Component {
     console.log("Response!", post);
   }
 
+  imageTagCreater = images => {
+    return images.map(image => {
+      return <Image src={image.url} key={image.id} fluid />;
+    });
+  };
+
   handleOverlayRef = c => {
     const { overlayRect } = this.state;
 

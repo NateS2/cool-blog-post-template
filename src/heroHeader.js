@@ -17,6 +17,18 @@ class HeroHeader extends Component {
     console.log("did await", this.state);
   }
 
+  changeTextSize = title => {
+    if (title.length > 50) {
+      return (
+        <h1 className="hero-text" style={{ fontSize: 20 }}>
+          {title}
+        </h1>
+      );
+    } else {
+      return <h1 className="hero-text">{title}</h1>;
+    }
+  };
+
   render() {
     return (
       <div>
@@ -28,7 +40,7 @@ class HeroHeader extends Component {
           className="App"
           transitionDuration={600}
           transitionTimingFunction="ease-in-out">
-          <h1 className="hero-text">{this.state.title}</h1>
+          {this.changeTextSize(this.state.title)}
           <Label
             attached="bottom right"
             style={{ marginBottom: 5, marginRight: 5 }}>

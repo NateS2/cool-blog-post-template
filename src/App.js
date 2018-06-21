@@ -63,6 +63,20 @@ const LeftImage = () => (
   />
 );
 
+const TopImage = () => (
+  <Image
+    floated="left"
+    size="large"
+    src="https://source.unsplash.com/random"
+    style={{
+      marginTop: -150,
+      marginLeft: -50,
+      backgroundColor: "#fff",
+      padding: 4
+    }}
+  />
+);
+
 const RightImage = () => (
   <Image
     floated="right"
@@ -135,54 +149,13 @@ export default class StickyLayout extends Component {
         `}</style>
         <HeroHeader title={title} creator={creator} />
         <Container text style={{ marginTop: "2em" }}>
+          <TopImage />
           <Header as="h1">Sticky Example</Header>
-          <p>
-            This example shows how to use lazy loaded images, a sticky menu, and
-            a simple text container
-          </p>
         </Container>
 
         {/* Attaching the top menu is a simple operation, we only switch `fixed` prop and add another style if it has
             gone beyond the scope of visibility
           */}
-        <Visibility
-          onBottomPassed={this.stickTopMenu}
-          onBottomVisible={this.unStickTopMenu}
-          once={false}>
-          <Menu
-            borderless
-            fixed={menuFixed && "top"}
-            style={menuFixed ? fixedMenuStyle : menuStyle}>
-            <Container text>
-              <Menu.Item>
-                <Image size="mini" src="/logo.png" />
-              </Menu.Item>
-              <Menu.Item header>Project Name</Menu.Item>
-              <Menu.Item as="a">Blog</Menu.Item>
-              <Menu.Item as="a">Articles</Menu.Item>
-
-              <Menu.Menu position="right">
-                <Dropdown text="Dropdown" pointing className="link item">
-                  <Dropdown.Menu>
-                    <Dropdown.Item>List Item</Dropdown.Item>
-                    <Dropdown.Item>List Item</Dropdown.Item>
-                    <Dropdown.Divider />
-                    <Dropdown.Header>Header Item</Dropdown.Header>
-                    <Dropdown.Item>
-                      <i className="dropdown icon" />
-                      <span className="text">Submenu</span>
-                      <Dropdown.Menu>
-                        <Dropdown.Item>List Item</Dropdown.Item>
-                        <Dropdown.Item>List Item</Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown.Item>
-                    <Dropdown.Item>List Item</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </Menu.Menu>
-            </Container>
-          </Menu>
-        </Visibility>
 
         <Container text>
           {_.times(3, i => <Paragraph key={i} />)}

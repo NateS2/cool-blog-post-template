@@ -16,21 +16,6 @@ import {
   Visibility
 } from "semantic-ui-react";
 
-const menuStyle = {
-  border: "none",
-  borderRadius: 0,
-  boxShadow: "none",
-  marginBottom: "1em",
-  marginTop: "4em",
-  transition: "box-shadow 0.5s ease, padding 0.5s ease"
-};
-
-const fixedMenuStyle = {
-  backgroundColor: "#fff",
-  border: "1px solid #ddd",
-  boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)"
-};
-
 const overlayStyle = {
   float: "left",
   margin: "0em 3em 1em 0em"
@@ -67,7 +52,9 @@ const TopImage = () => (
   <Image
     floated="left"
     size="large"
+    // fluid
     src="https://source.unsplash.com/random"
+    className="top-image"
     style={{
       marginTop: -150,
       marginLeft: -50,
@@ -262,11 +249,6 @@ export default class StickyLayout extends Component {
               </Grid.Row>
             </Grid>
             <Divider inverted section />
-            <Image
-              src="https://source.unsplash.com/random"
-              centered
-              size="mini"
-            />
             <List horizontal inverted divided link>
               <List.Item as="a" href="#">
                 Site Map

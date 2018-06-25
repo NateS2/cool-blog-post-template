@@ -45,3 +45,8 @@
 .paragraph-spacing {
   white-space: pre-line;
 }
+
+.top-image {
+  height: 4 vh;
+  width: auto;
+}

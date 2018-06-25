@@ -54,7 +54,6 @@ const TopImage = () => (
     size="large"
     // fluid
     src="https://source.unsplash.com/random"
-    className="top-image"
     style={{
       marginTop: -150,
       marginLeft: -50,

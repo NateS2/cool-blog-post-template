@@ -39,11 +39,11 @@ const fixedOverlayMenuStyle = {
   left: "800px"
 };
 
-const LeftImage = () => (
+const LeftImage = props => (
   <Image
     floated="left"
     size="medium"
-    src="https://source.unsplash.com/random"
+    src={props.imageSRC}
     style={{ margin: "2em 2em 2em -4em" }}
   />
 );
@@ -63,11 +63,11 @@ const TopImage = () => (
   />
 );
 
-const RightImage = () => (
+const RightImage = props => (
   <Image
     floated="right"
     size="medium"
-    src="https://source.unsplash.com/random"
+    src={props.imageSRC}
     style={{ margin: "2em -4em 2em 2em" }}
   />
 );
@@ -101,9 +101,42 @@ export default class StickyLayout extends Component {
   formatBody = () => {
     const { paragraphs } = this.state;
     const { images } = this.state.post;
-    const paragraphCount = paragraphs.length;
-    const imagecount = images.length;
+    var paragraphCount = 0;
+    var imageCount = 1;
     // image[0] will be used for heroHeader
+    function basicStructure() {
+      return (
+        <div>
+          {paragraphs[paragraphCount]}
+          <br />
+          <br />
+          {paragraphs[paragraphCount + 1]}
+          <br />
+          <br />
+          {paragraphs[paragraphCount + 2]}
+          <LeftImage imageSRC={images[imageCount].url} />
+          <br />
+          <br />
+          {paragraphs[paragraphCount + 3]}
+          <RightImage imageSRC={images[imageCount + 1].url} />
+          <br />
+          <br />
+        </div>
+      );
+      paragraphCount = paragraphCount + 4;
+      imageCount = imageCount + 2;
+    }
+    function structureLogic() {
+      if (
+        paragraphCount + 4 <= paragraphs.length &&
+        imageCount + 2 <= images.length
+      ) {
+        console.log("while loop ran");
+        return basicStructure();
+      }
+    }
+
+    return structureLogic();
   };
 
   render() {
@@ -125,7 +158,7 @@ export default class StickyLayout extends Component {
           <TopImage />
           <Header as="h1">Sticky Header</Header>
         </Container>
-        <Container text>{paragraphs[0]}</Container>
+        <Container text>{this.formatBody()}</Container>
       </div>
     );
   }

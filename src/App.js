@@ -142,7 +142,7 @@ export default class StickyLayout extends Component {
         <HeroHeader title={title} creator={creator} />
         <Container text style={{ marginTop: "2em" }}>
           <TopImage />
-          <Header as="h1">Sticky Example</Header>
+          <Header as="h1">Sticky Header</Header>
         </Container>
 
         {/* Attaching the top menu is a simple operation, we only switch `fixed` prop and add another style if it has

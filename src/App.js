@@ -93,8 +93,37 @@ export default class StickyLayout extends Component {
   };
 
   createParagraphs = () => {
-    const { body } = this.state.post;
+    const { body, images } = this.state.post;
     var paragraphBody = body.split(/[\r\n\t]+/gm);
+
+    // var fourParagraphs = [];
+    //
+    // for (var i = 0; i < paragraphBody.length; i + 4) {
+    //   var lastIndex = paragraphBody.length - i;
+    //
+    //   if (lastIndex > 3) {
+    //     lastIndex = 3;
+    //   }
+    //
+    //   fourParagraphs.push(paragraphBody.slice(i, i + lastIndex));
+    // }
+    //
+    // var twoImages = [];
+    //
+    // // for (var i = 0; i < array.length; i + 2) {
+    // //   array[i];
+    // // } // aye you nathan.... finish this up please... you just need to finish this loop like the one above
+    //
+    // const obj = [];
+    // fourParagraphs.map((paragraphs, index) => {
+    //   var object = {
+    //     paragraphs: paragraphs,
+    //     images: twoImages[index]
+    //   };
+    //  //obj.push(object)
+    // //return
+    // });
+
     this.setState({ paragraphs: paragraphBody });
   };
 
@@ -179,6 +208,7 @@ export default class StickyLayout extends Component {
           jsx.push(<br />);
           paragraphCount += 1;
         }
+        var aidsCode = 0;
         while (imageCount < images.length) {
           jsx.push(<LeftImage imageSRC={images[imageCount].url} />);
           imageCount += 1;
@@ -202,6 +232,14 @@ export default class StickyLayout extends Component {
     return structureLogic();
   };
 
+  renderImages = () => {
+    if (this.state.shouldRenderImages) {
+      return this.state.post.images.map(image => {
+        return <Image src={image.url} />;
+      });
+    }
+  };
+
   render() {
     const { images, body, title, creator } = this.state.post;
     const { paragraphs } = this.state;
@@ -223,6 +261,7 @@ export default class StickyLayout extends Component {
           <Header as="h1">Sticky Header</Header>
         </Container>
         <Container text>{this.formatBody()}</Container>
+        <Image.Group>{this.renderImages()}</Image.Group>
       </div>
     );
   }

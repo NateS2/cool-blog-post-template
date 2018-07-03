@@ -126,6 +126,47 @@ export default class StickyLayout extends Component {
       paragraphCount = paragraphCount + 4;
       imageCount = imageCount + 2;
     }
+    function edgeCases() {
+      let jsx = [];
+      // jsx.push(<div>)
+      var counter = 0;
+      if (
+        // more than 4 paragraphs less than 2 images
+        paragraphCount + 4 <= paragraphs.length &&
+        imageCount + 2 > images.length
+      ) {
+        while (paragraphCount < paragraphs.length) {
+          counter += 1;
+          if (counter === 3 && imageCount <= images.length) {
+            jsx.push(<div>{paragraphs[paragraphCount]}</div>);
+            jsx.push(<LeftImage imageSRC={images[imageCount].url} />);
+            jsx.push(<br />);
+            jsx.push(<br />);
+          } else {
+            jsx.push(<div>{paragraphs[paragraphCount]}</div>);
+            jsx.push(<br />);
+            jsx.push(<br />);
+          }
+          paragraphCount += 1;
+        }
+      }
+      if (
+        // less than 4 paragraphs more than 2 images
+        paragraphCount + 4 >= paragraphs.length &&
+        imageCount + 2 <= images.length
+      ) {
+        console.log("while loop ran");
+        return basicStructure();
+      }
+      if (
+        // less than 4 paragraphs less than 2 images
+        paragraphCount + 4 >= paragraphs.length &&
+        imageCount + 2 >= images.length
+      ) {
+        console.log("while loop ran");
+        return basicStructure();
+      }
+    }
     function structureLogic() {
       if (
         paragraphCount + 4 <= paragraphs.length &&

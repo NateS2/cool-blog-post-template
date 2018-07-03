@@ -102,29 +102,30 @@ export default class StickyLayout extends Component {
     const { paragraphs } = this.state;
     const { images } = this.state.post;
     var paragraphCount = 0;
-    var imageCount = 1;
+    var imageCount = 2;
     // image[0] will be used for heroHeader
+    // image[1] will be used for the giant intro image
     function basicStructure() {
+      paragraphCount = paragraphCount + 4;
+      imageCount = imageCount + 2;
       return (
         <div>
-          {paragraphs[paragraphCount]}
+          {paragraphs[paragraphCount - 4]}
           <br />
           <br />
-          {paragraphs[paragraphCount + 1]}
+          {paragraphs[paragraphCount - 3]}
           <br />
           <br />
-          {paragraphs[paragraphCount + 2]}
-          <LeftImage imageSRC={images[imageCount].url} />
+          {paragraphs[paragraphCount - 2]}
+          <LeftImage imageSRC={images[imageCount - 2].url} />
           <br />
           <br />
-          {paragraphs[paragraphCount + 3]}
-          <RightImage imageSRC={images[imageCount + 1].url} />
+          {paragraphs[paragraphCount - 1]}
+          <RightImage imageSRC={images[imageCount - 1].url} />
           <br />
           <br />
         </div>
       );
-      paragraphCount = paragraphCount + 4;
-      imageCount = imageCount + 2;
     }
     function edgeCases() {
       let jsx = [];
@@ -142,6 +143,7 @@ export default class StickyLayout extends Component {
             jsx.push(<LeftImage imageSRC={images[imageCount].url} />);
             jsx.push(<br />);
             jsx.push(<br />);
+            imageCount += 1;
           } else {
             jsx.push(<div>{paragraphs[paragraphCount]}</div>);
             jsx.push(<br />);
@@ -155,26 +157,46 @@ export default class StickyLayout extends Component {
         paragraphCount + 4 >= paragraphs.length &&
         imageCount + 2 <= images.length
       ) {
-        console.log("while loop ran");
-        return basicStructure();
+        while (paragraphCount < paragraphs.length) {
+          jsx.push(<div>{paragraphs[paragraphCount]}</div>);
+          jsx.push(<br />);
+          jsx.push(<br />);
+          paragraphCount += 1;
+        }
+        while (imageCount < images.length) {
+          jsx.push(<Image size="medium" src={images[imageCount].url} />);
+          imageCount += 1;
+        }
       }
       if (
         // less than 4 paragraphs less than 2 images
         paragraphCount + 4 >= paragraphs.length &&
         imageCount + 2 >= images.length
       ) {
-        console.log("while loop ran");
-        return basicStructure();
+        while (paragraphCount < paragraphs.length) {
+          jsx.push(<div>{paragraphs[paragraphCount]}</div>);
+          jsx.push(<br />);
+          jsx.push(<br />);
+          paragraphCount += 1;
+        }
+        while (imageCount < images.length) {
+          jsx.push(<LeftImage imageSRC={images[imageCount].url} />);
+          imageCount += 1;
+        }
       }
+      return <div>{jsx}</div>;
     }
     function structureLogic() {
-      if (
+      let returnArray = [];
+      while (
         paragraphCount + 4 <= paragraphs.length &&
         imageCount + 2 <= images.length
       ) {
         console.log("while loop ran");
-        return basicStructure();
+        returnArray.push(basicStructure());
       }
+      returnArray.push(edgeCases());
+      return returnArray;
     }
 
     return structureLogic();
@@ -184,6 +206,7 @@ export default class StickyLayout extends Component {
     const { images, body, title, creator } = this.state.post;
     const { paragraphs } = this.state;
     console.log("render paragraph", paragraphs);
+    console.log("what the hell wrong with images", images);
     return (
       <div>
         {/* Heads up, style below isn't necessary for correct work of example, simply our docs defines other

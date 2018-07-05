@@ -1,43 +1,7 @@
-import _ from "lodash";
 import React, { Component } from "react";
 import HeroHeader from "./heroHeader";
 import zupage from "zupage";
-import {
-  Container,
-  Divider,
-  Dropdown,
-  Grid,
-  Header,
-  Icon,
-  Image,
-  List,
-  Menu,
-  Segment,
-  Visibility
-} from "semantic-ui-react";
-
-const overlayStyle = {
-  float: "left",
-  margin: "0em 3em 1em 0em"
-};
-
-const fixedOverlayStyle = {
-  ...overlayStyle,
-  position: "fixed",
-  top: "80px",
-  zIndex: 10
-};
-
-const overlayMenuStyle = {
-  position: "relative",
-  left: 0,
-  transition: "left 0.5s ease"
-};
-
-const fixedOverlayMenuStyle = {
-  ...overlayMenuStyle,
-  left: "800px"
-};
+import { Container, Header, Image } from "semantic-ui-react";
 
 const LeftImage = props => (
   <Image
@@ -74,7 +38,7 @@ const RightImage = props => (
 
 export default class StickyLayout extends Component {
   state = {
-    post: { body: "", images: [], title: "", creator: "" },
+    post: { body: "", images: [], title: "", creator: {}, page: {} },
     paragraphs: [],
     basicObject: [],
     mutatedImages: []
@@ -82,7 +46,41 @@ export default class StickyLayout extends Component {
 
   async componentDidMount() {
     // const post = await zupage.getPost('4122d340-7bdb-4996-8400-f3d582d84280');
-    const post = await zupage.getCurrentPost();
+    const post = await zupage.getCurrentPost(); // uncommment this for build
+
+    // const post = {
+    //   id: "00000000-0000-0000-0000-000000000000",
+    //   body: "This is a body!",
+    //   creator: {
+    //     id: "00000000-0000-0000-0000-000000000000",
+    //     email: "matt@zupage.com",
+    //     name: "Matt",
+    //     profile_image_url:
+    //       "https://media.zupage.com/images/00000000-0000-0000-0000-000000000000"
+    //   },
+    //   images: [],
+    //   is_shared: false,
+    //   title: "null",
+    //   description: null,
+    //   modified_time: 1519838723.028098,
+    //   page: {
+    //     id: "00000000-0000-0000-0000-000000000000",
+    //     description: "This is a zupage website!",
+    //     domain: "zupage.com",
+    //     hero_image_url:
+    //       "https://media.zupage.com/images/00000000-0000-0000-0000-000000000000",
+    //     icon_image_url:
+    //       "https://media.zupage.com/images/00000000-0000-0000-0000-000000000000",
+    //     is_private: false,
+    //     name: "My Zupage",
+    //     relationship: "owner",
+    //     subdomain: "mypage",
+    //     subscribed: true,
+    //     theme_id: "00000000-0000-0000-0000-000000000000"
+    //   },
+    //   published_time: 1519838723.028098
+    // };
+
     this.setState({ post });
     console.log("Response!", post);
     this.createParagraphs();
@@ -171,7 +169,7 @@ export default class StickyLayout extends Component {
     // image[1] will be used for the giant intro image
 
     function safeImageLoad(props) {
-      if (props.length == 2) {
+      if (props.length === 2) {
         return <RightImage imageSRC={props[1].url} />;
       } else {
         return <div />;
@@ -182,7 +180,7 @@ export default class StickyLayout extends Component {
     return basicObject.map(objects => {
       console.log("objects in da map", objects);
       const { paragraphs, images } = objects;
-      if (images.length == 0) {
+      if (images.length === 0) {
         return paragraphs.map(paragraph => {
           return (
             <div>
@@ -222,8 +220,24 @@ export default class StickyLayout extends Component {
   };
 
   renderHeader = () => {
-    const { images, body, title, creator } = this.state.post;
-    if (images.length < 2) {
+    const { images, title, creator, page } = this.state.post;
+    if (images.length === 0) {
+      if (
+        page.hero_image_url !=
+          "https://image.zpcdn.net/00000000-0000-0000-0000-000000000000.jpeg" &&
+        page.hero_image_url != null
+      ) {
+        const heroImage = [page.hero_image_url];
+        // this.setState({ mutatedImages: heroImage }); //causes infinite loop if you set state in render
+        return (
+          <HeroHeader
+            title={title}
+            creator={creator}
+            images={this.state.mutatedImages}
+          />
+        );
+      }
+    } else if (images.length === 1) {
       return <HeroHeader title={title} creator={creator} images={images} />;
     } else {
       return (
@@ -231,7 +245,7 @@ export default class StickyLayout extends Component {
           <HeroHeader title={title} creator={creator} images={images} />
           <Container text style={{ marginTop: "2em" }}>
             <TopImage imageSRC={images[1].url} />
-            <Header as="h1">Sticky Header</Header>
+            {/* <Header as="h1">Sticky Header</Header> */}
           </Container>
         </Container>
       );
@@ -251,34 +265,14 @@ export default class StickyLayout extends Component {
         `}</style>
         {this.renderHeader()}
         <Container text>{this.formatBody()}</Container>
-        <Image.Group size="medium">{this.renderImages()}</Image.Group>
+        <br />
+        <br />
+        <Container>
+          <Image.Group size="medium" centered>
+            {this.renderImages()}
+          </Image.Group>
+        </Container>
       </div>
     );
   }
-}
-
-{
-  /* <div
-  ref={this.handleOverlayRef}
-  style={overlayFixed ? fixedOverlayStyle : overlayStyle}>
-  <Menu
-    icon="labeled"
-    style={overlayFixed ? fixedOverlayMenuStyle : overlayMenuStyle}
-    vertical>
-    <Menu.Item>
-      <Icon name="twitter" />
-      Twitter
-    </Menu.Item>
-
-    <Menu.Item>
-      <Icon name="facebook" />
-      Share
-    </Menu.Item>
-
-    <Menu.Item>
-      <Icon name="mail" />
-      Email
-    </Menu.Item>
-  </Menu>
-</div> */
 }

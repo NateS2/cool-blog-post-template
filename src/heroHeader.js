@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import LazyHero from "react-lazy-hero";
 import "./App.css";
-import { Header, Label, Image } from "semantic-ui-react";
+import { Label, Image } from "semantic-ui-react";
 
 class HeroHeader extends Component {
   state = { images: [], title: "", imageSRC: "", count: 0, creator: {} };
@@ -31,7 +31,7 @@ class HeroHeader extends Component {
   };
 
   setHeroImage = () => {
-    if (typeof this.state.images == "undefined") {
+    if (typeof this.state.images === "undefined") {
       this.setState({
         imageSRC:
           "https://images.unsplash.com/photo-1529446253549-fdcd7d925106?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=bd224123c1c190693663a5a035ed2a38&auto=format&fit=crop&w=1950&q=80"

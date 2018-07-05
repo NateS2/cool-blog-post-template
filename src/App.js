@@ -102,6 +102,10 @@ export default class StickyLayout extends Component {
     console.log("images", images);
     var fourParagraphs = [];
 
+    if (mutableImages.length >= 2) {
+      mutableImages.splice(0, 2);
+    }
+
     for (var i = 0; i < paragraphBody.length; i = i + 4) {
       var lastIndex = paragraphBody.length - i;
 
@@ -148,7 +152,9 @@ export default class StickyLayout extends Component {
     console.log("obj length", obj.length);
     var length = obj.length * 2;
     if (images.length > length) {
-      var lastObj = obj.pop();
+      var lastObj = {};
+      Object.assign(lastObj, obj[obj.length - 1]);
+      console.log("lastObj", lastObj);
 
       if (lastObj.images.length === 0) {
         mutableImages.splice(0, length - 2);
@@ -163,116 +169,50 @@ export default class StickyLayout extends Component {
   };
 
   formatBody = () => {
-    const { paragraphs } = this.state;
-    const { images } = this.state.post;
-    var paragraphCount = 0;
-    var imageCount = 2;
+    const { basicObject, mutatedImages } = this.state;
     // image[0] will be used for heroHeader
     // image[1] will be used for the giant intro image
-    function basicStructure() {
-      paragraphCount = paragraphCount + 4;
-      imageCount = imageCount + 2;
-      return (
-        <div>
-          {paragraphs[paragraphCount - 4]}
-          <br />
-          <br />
-          {paragraphs[paragraphCount - 3]}
-          <br />
-          <br />
-          {paragraphs[paragraphCount - 2]}
-          <LeftImage imageSRC={images[imageCount - 2].url} />
-          <br />
-          <br />
-          {paragraphs[paragraphCount - 1]}
-          <RightImage imageSRC={images[imageCount - 1].url} />
-          <br />
-          <br />
-        </div>
-      );
-    }
-    function edgeCases() {
-      let jsx = [];
-      // jsx.push(<div>)
-      var counter = 0;
-      if (
-        // more than 4 paragraphs less than 2 images
-        paragraphCount + 4 <= paragraphs.length &&
-        imageCount + 2 > images.length
-      ) {
-        while (paragraphCount < paragraphs.length) {
-          counter += 1;
-          if (counter === 3 && imageCount <= images.length) {
-            jsx.push(<div>{paragraphs[paragraphCount]}</div>);
-            jsx.push(<LeftImage imageSRC={images[imageCount].url} />);
-            jsx.push(<br />);
-            jsx.push(<br />);
-            imageCount += 1;
-          } else {
-            jsx.push(<div>{paragraphs[paragraphCount]}</div>);
-            jsx.push(<br />);
-            jsx.push(<br />);
-          }
-          paragraphCount += 1;
-        }
+    console.log("basic object length", basicObject);
+    return basicObject.map(objects => {
+      console.log("objects in da map", objects);
+      const { paragraphs, images } = objects;
+      if (images.length == 0) {
+        return paragraphs.map(paragraph => {
+          return (
+            <div>
+              {paragraph}
+              <br />
+              <br />
+            </div>
+          );
+        });
+      } else {
+        return (
+          <div>
+            {paragraphs[0]}
+            <br />
+            <br />
+            {paragraphs[1]}
+            <br />
+            <br />
+            {paragraphs[2]}
+            <LeftImage imageSRC={images[0].url} />
+            <br />
+            <br />
+            {paragraphs[3]}
+            <RightImage imageSRC={images[1].url} />
+            <br />
+            <br />
+          </div>
+        );
       }
-      if (
-        // less than 4 paragraphs more than 2 images
-        paragraphCount + 4 >= paragraphs.length &&
-        imageCount + 2 <= images.length
-      ) {
-        while (paragraphCount < paragraphs.length) {
-          jsx.push(<div>{paragraphs[paragraphCount]}</div>);
-          jsx.push(<br />);
-          jsx.push(<br />);
-          paragraphCount += 1;
-        }
-        while (imageCount < images.length) {
-          jsx.push(<Image size="medium" src={images[imageCount].url} />);
-          imageCount += 1;
-        }
-      }
-      if (
-        // less than 4 paragraphs less than 2 images
-        paragraphCount + 4 >= paragraphs.length &&
-        imageCount + 2 >= images.length
-      ) {
-        while (paragraphCount < paragraphs.length) {
-          jsx.push(<div>{paragraphs[paragraphCount]}</div>);
-          jsx.push(<br />);
-          jsx.push(<br />);
-          paragraphCount += 1;
-        }
-        var aidsCode = 0;
-        while (imageCount < images.length) {
-          jsx.push(<LeftImage imageSRC={images[imageCount].url} />);
-          imageCount += 1;
-        }
-      }
-      return <div>{jsx}</div>;
-    }
-    function structureLogic() {
-      let returnArray = [];
-      while (
-        paragraphCount + 4 <= paragraphs.length &&
-        imageCount + 2 <= images.length
-      ) {
-        console.log("while loop ran");
-        returnArray.push(basicStructure());
-      }
-      returnArray.push(edgeCases());
-      return returnArray;
-    }
-
-    return structureLogic();
+    });
   };
 
   renderImages = () => {
-    if (this.state.shouldRenderImages) {
-      return this.state.post.images.map(image => {
-        return <Image src={image.url} />;
-      });
-    }
+    return this.state.mutatedImages.map(image => {
+      return <Image src={image.url} />;
+    });
   };
 
   render() {
@@ -295,7 +235,7 @@ export default class StickyLayout extends Component {
           <Header as="h1">Sticky Header</Header>
         </Container>
         <Container text>{this.formatBody()}</Container>
-        <Image.Group>{this.renderImages()}</Image.Group>
+        <Image.Group size="medium">{this.renderImages()}</Image.Group>
       </div>
     );
   }

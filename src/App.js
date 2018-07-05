@@ -75,7 +75,9 @@ const RightImage = props => (
 export default class StickyLayout extends Component {
   state = {
     post: { body: "", images: [], title: "", creator: "" },
-    paragraphs: []
+    paragraphs: [],
+    basicObject: [],
+    mutatedImages: []
   };
 
   async componentDidMount() {
@@ -94,36 +96,69 @@ export default class StickyLayout extends Component {
 
   createParagraphs = () => {
     const { body, images } = this.state.post;
+    var mutableImages = [];
+    Object.assign(mutableImages, images);
     var paragraphBody = body.split(/[\r\n\t]+/gm);
+    console.log("images", images);
+    var fourParagraphs = [];
 
-    // var fourParagraphs = [];
-    //
-    // for (var i = 0; i < paragraphBody.length; i + 4) {
-    //   var lastIndex = paragraphBody.length - i;
-    //
-    //   if (lastIndex > 3) {
-    //     lastIndex = 3;
-    //   }
-    //
-    //   fourParagraphs.push(paragraphBody.slice(i, i + lastIndex));
-    // }
-    //
-    // var twoImages = [];
-    //
-    // // for (var i = 0; i < array.length; i + 2) {
-    // //   array[i];
-    // // } // aye you nathan.... finish this up please... you just need to finish this loop like the one above
-    //
-    // const obj = [];
-    // fourParagraphs.map((paragraphs, index) => {
-    //   var object = {
-    //     paragraphs: paragraphs,
-    //     images: twoImages[index]
-    //   };
-    //  //obj.push(object)
-    // //return
-    // });
+    for (var i = 0; i < paragraphBody.length; i = i + 4) {
+      var lastIndex = paragraphBody.length - i;
 
+      if (lastIndex > 4) {
+        lastIndex = 4;
+      }
+      console.log("four paragraphs", paragraphBody.slice(i, i + lastIndex));
+      fourParagraphs.push(paragraphBody.slice(i, i + lastIndex));
+    }
+
+    var twoImages = [];
+
+    for (var i = 0; i < mutableImages.length; i = i + 2) {
+      var lastIndex = mutableImages.length - i;
+
+      if (lastIndex > 2) {
+        lastIndex = 2;
+      }
+      // console.log("two images", mutableImages.slice(i, i + lastIndex));
+      console.log("images array", mutableImages);
+      twoImages.push(mutableImages.slice(i, i + lastIndex));
+    } // aye you nathan.... finish this up please... you just need to finish this loop like the one above
+
+    const obj = [];
+    fourParagraphs.map((paragraphs, index) => {
+      if (paragraphs.length === 4) {
+        var object = {
+          paragraphs: paragraphs,
+          images: twoImages[index]
+        };
+      } else {
+        var object = {
+          paragraphs: paragraphs,
+          images: []
+        };
+      }
+
+      obj.push(object);
+      console.log("objects", object);
+      return;
+    });
+
+    console.log("images length", this.state.post.images.length);
+    console.log("obj length", obj.length);
+    var length = obj.length * 2;
+    if (images.length > length) {
+      var lastObj = obj.pop();
+
+      if (lastObj.images.length === 0) {
+        mutableImages.splice(0, length - 2);
+      } else {
+        mutableImages.splice(0, length);
+      }
+    }
+    console.log("mutableImages", mutableImages);
+    this.setState({ mutatedImages: mutableImages });
+    this.setState({ basicObject: obj });
     this.setState({ paragraphs: paragraphBody });
   };
 
@@ -243,8 +278,7 @@ export default class StickyLayout extends Component {
   render() {
     const { images, body, title, creator } = this.state.post;
     const { paragraphs } = this.state;
-    console.log("render paragraph", paragraphs);
-    console.log("what the hell wrong with images", images);
+
     return (
       <div>
         {/* Heads up, style below isn't necessary for correct work of example, simply our docs defines other
@@ -292,67 +326,3 @@ export default class StickyLayout extends Component {
   </Menu>
 </div> */
 }
-
-// import React, { Component } from "react";
-// import logo from "./logo.svg";
-// import "./App.css";
-// import { Container, Image, Header } from "semantic-ui-react";
-// import HeroHeader from "./heroHeader";
-// import zupage from "zupage";
-//
-// class App extends Component {
-//   state = { post: { body: "", images: [] } };
-//
-//   async componentDidMount() {
-//     // const post = await zupage.getPost('4122d340-7bdb-4996-8400-f3d582d84280');
-//     const post = await zupage.getCurrentPost();
-//     this.setState({ post });
-//     console.log("Response!", post);
-//   }
-//
-//   render() {
-//     return (
-//       <Container fluid>
-//         <HeroHeader />
-//         <Container textAlignment="center" style={{ width: 500 }}>
-//           Lorem ipsum dolor amet ramps dreamcatcher stumptown beard, poke
-//           shoreditch asymmetrical narwhal. Kale chips salvia selvage, adaptogen
-//           kogi vaporware offal chambray. Man braid man bun venmo quinoa,
-//           actually bushwick normcore. Jianbing keffiyeh trust fund bespoke
-//           polaroid quinoa retro hashtag. Vape synth +1, bitters activated
-//           charcoal snackwave 90's cliche. Street art beard neutra, PBR&B
-//           sriracha tousled fanny pack ethical meh. Cliche pug succulents vice
-//           palo santo pickled. Copper mug jianbing marfa iceland adaptogen
-//           single-origin coffee neutra deep v sriracha cliche unicorn plaid viral
-//           truffaut biodiesel. Viral retro raclette organic, keytar semiotics
-//           offal chartreuse bespoke unicorn. Typewriter artisan next level
-//           portland williamsburg. Freegan hexagon selvage meggings sartorial
-//           wayfarers pour-over art party mlkshk pork belly. Prism waistcoat
-//           actually hexagon bespoke. Cloud bread tote bag humblebrag mlkshk
-//           copper mug ugh blue bottle dreamcatcher man braid. Food truck hashtag
-//           lyft, knausgaard ramps vegan pour-over slow-carb celiac live-edge put
-//           a bird on it pinterest sriracha. Typewriter cardigan keytar humblebrag
-//           activated charcoal coloring book tbh. Vape fixie DIY selfies cornhole
-//           drinking vinegar, hoodie tote bag palo santo plaid dreamcatcher retro
-//           shabby chic fam. Paleo succulents ennui vexillologist, blue bottle
-//           glossier marfa meggings bushwick. Gochujang semiotics coloring book
-//           banjo flannel pitchfork. Blog XOXO mlkshk iceland affogato edison bulb
-//           celiac selfies. Occupy activated charcoal williamsburg cardigan, woke
-//           jianbing copper mug succulents. Tote bag fanny pack asymmetrical
-//           actually twee. Butcher pok pok slow-carb flexitarian gluten-free
-//           jianbing man bun mustache cronut, heirloom sartorial quinoa photo
-//           booth disrupt. Disrupt distillery put a bird on it, coloring book man
-//           bun sartorial woke succulents helvetica tattooed echo park pop-up
-//           chillwave paleo portland. Pitchfork helvetica banh mi tattooed squid
-//           trust fund. Yr mustache organic glossier tattooed polaroid fixie
-//           hashtag pitchfork cronut tbh jean shorts banjo fingerstache
-//           meditation. Ethical shabby chic iPhone, locavore viral put a bird on
-//           it cold-pressed godard occupy dreamcatcher af williamsburg leggings
-//           tilde.
-//         </Container>
-//       </Container>
-//     );
-//   }
-// }
-//
-// export default App;

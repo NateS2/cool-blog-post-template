@@ -48,12 +48,12 @@ const LeftImage = props => (
   />
 );
 
-const TopImage = () => (
+const TopImage = props => (
   <Image
     floated="left"
     size="large"
     // fluid
-    src="https://source.unsplash.com/random"
+    src={props.imageSRC}
     style={{
       marginTop: -120, //-150
       marginLeft: -50,
@@ -152,15 +152,12 @@ export default class StickyLayout extends Component {
     console.log("obj length", obj.length);
     var length = obj.length * 2;
     if (images.length > length) {
-      var lastObj = {};
-      Object.assign(lastObj, obj[obj.length - 1]);
-      console.log("lastObj", lastObj);
+      // var lastObj = {};
+      // Object.assign(lastObj, obj[obj.length - 1]);
+      // console.log("lastObj", lastObj);
 
-      if (lastObj.images.length === 0) {
-        mutableImages.splice(0, length - 2);
-      } else {
-        mutableImages.splice(0, length);
-      }
+      obj[obj.length - 1].images = [];
+      mutableImages.splice(0, length - 2);
     }
     console.log("mutableImages", mutableImages);
     this.setState({ mutatedImages: mutableImages });
@@ -172,6 +169,15 @@ export default class StickyLayout extends Component {
     const { basicObject, mutatedImages } = this.state;
     // image[0] will be used for heroHeader
     // image[1] will be used for the giant intro image
+
+    function safeImageLoad(props) {
+      if (props.length == 2) {
+        return <RightImage imageSRC={props[1].url} />;
+      } else {
+        return <div />;
+      }
+    }
+
     console.log("basic object length", basicObject);
     return basicObject.map(objects => {
       console.log("objects in da map", objects);
@@ -200,7 +206,7 @@ export default class StickyLayout extends Component {
             <br />
             <br />
             {paragraphs[3]}
-            <RightImage imageSRC={images[1].url} />
+            {safeImageLoad(images)}
             <br />
             <br />
           </div>
@@ -215,10 +221,24 @@ export default class StickyLayout extends Component {
     });
   };
 
-  render() {
+  renderHeader = () => {
     const { images, body, title, creator } = this.state.post;
-    const { paragraphs } = this.state;
+    if (images.length < 2) {
+      return <HeroHeader title={title} creator={creator} images={images} />;
+    } else {
+      return (
+        <Container fluid>
+          <HeroHeader title={title} creator={creator} images={images} />
+          <Container text style={{ marginTop: "2em" }}>
+            <TopImage imageSRC={images[1].url} />
+            <Header as="h1">Sticky Header</Header>
+          </Container>
+        </Container>
+      );
+    }
+  };
 
+  render() {
     return (
       <div>
         {/* Heads up, style below isn't necessary for correct work of example, simply our docs defines other
@@ -229,11 +249,7 @@ export default class StickyLayout extends Component {
             background: #fff;
           }
         `}</style>
-        <HeroHeader title={title} creator={creator} images={images} />
-        <Container text style={{ marginTop: "2em" }}>
-          <TopImage />
-          <Header as="h1">Sticky Header</Header>
-        </Container>
+        {this.renderHeader()}
         <Container text>{this.formatBody()}</Container>
         <Image.Group size="medium">{this.renderImages()}</Image.Group>
       </div>

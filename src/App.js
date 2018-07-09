@@ -160,11 +160,14 @@ export default class StickyLayout extends Component {
       // console.log("two images", mutableImages.slice(i, i + lastIndex));
       console.log("images array", mutableImages);
       twoImages.push(mutableImages.slice(i, i + lastIndex));
+      console.log("check for undefined", twoImages);
     } // aye you nathan.... finish this up please... you just need to finish this loop like the one above
 
     const obj = [];
     fourParagraphs.map((paragraphs, index) => {
-      if (paragraphs.length === 4) {
+      console.log("second check for undefined", twoImages[index]);
+      if (paragraphs.length === 4 && twoImages[index] != undefined) {
+        // wont always be two images for a length of 4
         var object = {
           paragraphs: paragraphs,
           images: twoImages[index]
@@ -191,6 +194,8 @@ export default class StickyLayout extends Component {
 
       obj[obj.length - 1].images = [];
       mutableImages.splice(0, length - 2);
+    } else {
+      mutableImages = [];
     }
     console.log("mutableImages", mutableImages);
     this.setState({ mutatedImages: mutableImages });
@@ -215,7 +220,7 @@ export default class StickyLayout extends Component {
     return basicObject.map(objects => {
       console.log("objects in da map", objects);
       const { paragraphs, images } = objects;
-      if (images.length === 0) {
+      if (images === undefined || images.length === 0) {
         return paragraphs.map(paragraph => {
           return (
             <div>

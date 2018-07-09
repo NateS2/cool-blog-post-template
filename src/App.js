@@ -47,42 +47,42 @@ export default class StickyLayout extends Component {
 
   async componentDidMount() {
     // const post = await zupage.getPost('4122d340-7bdb-4996-8400-f3d582d84280');
-    // const post = await zupage.getCurrentPost(); // uncommment this for build
+    const post = await zupage.getCurrentPost(); // uncommment this for build
     // console.log("this is a post", post);
-    const post = {
-      id: "00000000-0000-0000-0000-000000000000",
-      body: "This is a body! aalsdhf a;sldhf;alsdjf /n ;lakshdkjl",
-      creator: {
-        id: "00000000-0000-0000-0000-000000000000",
-        email: "matt@zupage.com",
-        name: "Matt",
-        profile_image_url:
-          "https://media.zupage.com/images/00000000-0000-0000-0000-000000000000"
-      },
-      images: [],
-      is_shared: false,
-      title: "null",
-      description: null,
-      modified_time: 1519838723.028098,
-      page: {
-        id: "00000000-0000-0000-0000-000000000000",
-        description: "This is a zupage website!",
-        domain: "zupage.com",
-        hero_image_url:
-          "https://www.gettyimages.ie/gi-resources/images/Homepage/Hero/UK/CMS_Creative_164657191_Kingfisher.jpg", //"https://media.zupage.com/images/00000000-0000-0000-0000-000000000000",
-        icon_image_url:
-          "https://media.zupage.com/images/00000000-0000-0000-0000-000000000000",
-        is_private: false,
-        name: "My Zupage",
-        relationship: "owner",
-        subdomain: "mypage",
-        subscribed: true,
-        theme_id: "00000000-0000-0000-0000-000000000000"
-      },
-      published_time: 1519838723.028098
-    };
+    // const post = {
+    //   id: "00000000-0000-0000-0000-000000000000",
+    //   body: null, //"This is a body! aalsdhf a;sldhf;alsdjf /n ;lakshdkjl",
+    //   creator: {
+    //     id: "00000000-0000-0000-0000-000000000000",
+    //     email: "matt@zupage.com",
+    //     name: null,
+    //     profile_image_url:
+    //       "https://media.zupage.com/images/00000000-0000-0000-0000-000000000000"
+    //   },
+    //   images: [],
+    //   is_shared: false,
+    //   title: null, //"A hard working blue collar title",
+    //   description: null,
+    //   modified_time: 1519838723.028098,
+    //   page: {
+    //     id: "00000000-0000-0000-0000-000000000000",
+    //     description: "This is a zupage website!",
+    //     domain: "zupage.com",
+    //     hero_image_url:
+    //       "https://www.gettyimages.ie/gi-resources/images/Homepage/Hero/UK/CMS_Creative_164657191_Kingfisher.jpg", //"https://media.zupage.com/images/00000000-0000-0000-0000-000000000000",
+    //     icon_image_url:
+    //       "https://media.zupage.com/images/00000000-0000-0000-0000-000000000000",
+    //     is_private: false,
+    //     name: "My Zupage",
+    //     relationship: "owner",
+    //     subdomain: "mypage",
+    //     subscribed: true,
+    //     theme_id: "00000000-0000-0000-0000-000000000000"
+    //   },
+    //   published_time: 1519838723.028098
+    // };
 
-    this.setState({ post });
+    await this.setState({ post }); // await necessary for local data... so could be necessary in some edge cases
     console.log("Response!", post);
     this.createParagraphs();
     this.assignHeroImage();
@@ -109,7 +109,9 @@ export default class StickyLayout extends Component {
           // height:
           // width:
         };
+
         const heroImages = [sampleImage];
+        console.log("Hero imagesss", heroImages);
         this.setState({ heroImage: heroImages }); //causes infinite loop if you set state in render
       }
     }
@@ -125,7 +127,11 @@ export default class StickyLayout extends Component {
     const { body, images } = this.state.post;
     var mutableImages = [];
     Object.assign(mutableImages, images);
-    var paragraphBody = body.split(/[\r\n\t]+/gm);
+    if (body === null) {
+      paragraphBody = "";
+    } else {
+      var paragraphBody = body.split(/[\r\n\t]+/gm);
+    }
     console.log("images", images);
     var fourParagraphs = [];
 
@@ -253,6 +259,7 @@ export default class StickyLayout extends Component {
     console.log("heroImage length", this.state.heroImage.length);
     if (images.length === 0) {
       if (this.state.heroImage.length === 1) {
+        console.log("dis female dog was called", this.state.heroImage);
         return (
           <HeroHeader
             title={title}

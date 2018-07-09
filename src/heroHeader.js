@@ -6,6 +6,18 @@ import { Label, Image } from "semantic-ui-react";
 class HeroHeader extends Component {
   state = { images: [], title: "", imageSRC: "", count: 0, creator: {} };
 
+  async componentDidMount() {
+    console.log("HeroHeader was Mounted", this.props);
+
+    await this.setState({
+      images: this.props.images,
+      title: this.props.title,
+      creator: this.props.creator
+    });
+    console.log("did await", this.state);
+    this.setHeroImage();
+  }
+
   async componentWillReceiveProps(newProps) {
     console.log("New Props on the hero", newProps);
 
@@ -19,14 +31,16 @@ class HeroHeader extends Component {
   }
 
   changeTextSize = title => {
-    if (title.length > 50) {
-      return (
-        <h1 className="hero-text" style={{ fontSize: 20 }}>
-          {title}
-        </h1>
-      );
-    } else {
-      return <h1 className="hero-text">{title}</h1>;
+    if (title != null) {
+      if (title.length > 50) {
+        return (
+          <h1 className="hero-text" style={{ fontSize: 20 }}>
+            {title}
+          </h1>
+        );
+      } else {
+        return <h1 className="hero-text">{title}</h1>;
+      }
     }
   };
 

@@ -187,13 +187,15 @@ export default class StickyLayout extends Component {
     console.log("images length", this.state.post.images.length);
     console.log("obj length", obj.length);
     var length = obj.length * 2;
-    if (images.length > length) {
+    if (images.length > length && length != 0) {
       // var lastObj = {};
       // Object.assign(lastObj, obj[obj.length - 1]);
       // console.log("lastObj", lastObj);
 
       obj[obj.length - 1].images = [];
       mutableImages.splice(0, length - 2);
+    } else if (images.length > length && length === 0) {
+      mutableImages.splice(0, 2);
     } else {
       mutableImages = [];
     }

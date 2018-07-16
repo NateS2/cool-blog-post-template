@@ -47,41 +47,7 @@ export default class StickyLayout extends Component {
 
   async componentDidMount() {
     // const post = await zupage.getPost('4122d340-7bdb-4996-8400-f3d582d84280');
-    const post = await zupage.getCurrentPost(); // uncommment this for build
-    // console.log("this is a post", post);
-    // const post = {
-    //   id: "00000000-0000-0000-0000-000000000000",
-    //   body: null, //"This is a body! aalsdhf a;sldhf;alsdjf /n ;lakshdkjl",
-    //   creator: {
-    //     id: "00000000-0000-0000-0000-000000000000",
-    //     email: "matt@zupage.com",
-    //     name: null,
-    //     profile_image_url:
-    //       "https://media.zupage.com/images/00000000-0000-0000-0000-000000000000"
-    //   },
-    //   images: [],
-    //   is_shared: false,
-    //   title: null, //"A hard working blue collar title",
-    //   description: null,
-    //   modified_time: 1519838723.028098,
-    //   page: {
-    //     id: "00000000-0000-0000-0000-000000000000",
-    //     description: "This is a zupage website!",
-    //     domain: "zupage.com",
-    //     hero_image_url:
-    //       "https://www.gettyimages.ie/gi-resources/images/Homepage/Hero/UK/CMS_Creative_164657191_Kingfisher.jpg", //"https://media.zupage.com/images/00000000-0000-0000-0000-000000000000",
-    //     icon_image_url:
-    //       "https://media.zupage.com/images/00000000-0000-0000-0000-000000000000",
-    //     is_private: false,
-    //     name: "My Zupage",
-    //     relationship: "owner",
-    //     subdomain: "mypage",
-    //     subscribed: true,
-    //     theme_id: "00000000-0000-0000-0000-000000000000"
-    //   },
-    //   published_time: 1519838723.028098
-    // };
-
+    const post = await zupage.getCurrentPost();
     await this.setState({ post }); // await necessary for local data... so could be necessary in some edge cases
     console.log("Response!", post);
     this.createParagraphs();
@@ -90,11 +56,6 @@ export default class StickyLayout extends Component {
 
   assignHeroImage = () => {
     const { images, title, creator, page } = this.state.post;
-    console.log(
-      "this is the image length dude",
-      images.length,
-      page.hero_image_url
-    );
     if (images.length === 0) {
       if (
         page.hero_image_url !=
@@ -111,8 +72,8 @@ export default class StickyLayout extends Component {
         };
 
         const heroImages = [sampleImage];
-        console.log("Hero imagesss", heroImages);
-        this.setState({ heroImage: heroImages }); //causes infinite loop if you set state in render
+        console.log("Hero images", heroImages);
+        this.setState({ heroImage: heroImages });
       }
     }
   };
@@ -123,6 +84,11 @@ export default class StickyLayout extends Component {
     });
   };
 
+  /*
+  This function splits up the data into usable objects. Split up into 4
+  paragraphs and two images if it can. Mutable images is the remaining images 
+  not used to be placed at the bottom.
+*/
   createParagraphs = () => {
     const { body, images } = this.state.post;
     var mutableImages = [];
@@ -157,15 +123,13 @@ export default class StickyLayout extends Component {
       if (lastIndex > 2) {
         lastIndex = 2;
       }
-      // console.log("two images", mutableImages.slice(i, i + lastIndex));
       console.log("images array", mutableImages);
       twoImages.push(mutableImages.slice(i, i + lastIndex));
       console.log("check for undefined", twoImages);
-    } // aye you nathan.... finish this up please... you just need to finish this loop like the one above
+    }
 
     const obj = [];
     fourParagraphs.map((paragraphs, index) => {
-      console.log("second check for undefined", twoImages[index]);
       if (paragraphs.length === 4 && twoImages[index] != undefined) {
         // wont always be two images for a length of 4
         var object = {
@@ -184,14 +148,8 @@ export default class StickyLayout extends Component {
       return;
     });
 
-    console.log("images length", this.state.post.images.length);
-    console.log("obj length", obj.length);
     var length = obj.length * 2;
     if (images.length > length && length != 0) {
-      // var lastObj = {};
-      // Object.assign(lastObj, obj[obj.length - 1]);
-      // console.log("lastObj", lastObj);
-
       obj[obj.length - 1].images = [];
       mutableImages.splice(0, length - 2);
     } else if (images.length > length && length === 0) {
@@ -199,7 +157,6 @@ export default class StickyLayout extends Component {
     } else {
       mutableImages = [];
     }
-    console.log("mutableImages", mutableImages);
     this.setState({ mutatedImages: mutableImages });
     this.setState({ basicObject: obj });
     this.setState({ paragraphs: paragraphBody });
@@ -220,7 +177,6 @@ export default class StickyLayout extends Component {
 
     console.log("basic object length", basicObject);
     return basicObject.map(objects => {
-      console.log("objects in da map", objects);
       const { paragraphs, images } = objects;
       if (images === undefined || images.length === 0) {
         return paragraphs.map(paragraph => {
@@ -266,7 +222,6 @@ export default class StickyLayout extends Component {
     console.log("heroImage length", this.state.heroImage.length);
     if (images.length === 0) {
       if (this.state.heroImage.length === 1) {
-        console.log("dis female dog was called", this.state.heroImage);
         return (
           <HeroHeader
             title={title}

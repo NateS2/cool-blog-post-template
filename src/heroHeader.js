@@ -7,26 +7,26 @@ class HeroHeader extends Component {
   state = { images: [], title: "", imageSRC: "", count: 0, creator: {} };
 
   async componentDidMount() {
-    console.log("HeroHeader was Mounted", this.props);
+    // console.log("HeroHeader was Mounted", this.props);
 
     await this.setState({
       images: this.props.images,
       title: this.props.title,
       creator: this.props.creator
     });
-    console.log("did await", this.state);
+    // console.log("did await", this.state);
     this.setHeroImage();
   }
 
   async componentWillReceiveProps(newProps) {
-    console.log("New Props on the hero", newProps);
+    // console.log("New Props on the hero", newProps);
 
     await this.setState({
       images: newProps.images,
       title: newProps.title,
       creator: newProps.creator
     });
-    console.log("did await", this.state);
+    // console.log("did await", this.state);
     this.setHeroImage();
   }
 

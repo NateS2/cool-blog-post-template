@@ -49,7 +49,7 @@ export default class StickyLayout extends Component {
     // const post = await zupage.getPost('4122d340-7bdb-4996-8400-f3d582d84280');
     const post = await zupage.getCurrentPost();
     await this.setState({ post }); // await necessary for local data... so could be necessary in some edge cases
-    console.log("Response!", post);
+    // console.log("Response!", post);
     this.createParagraphs();
     this.assignHeroImage();
   }
@@ -72,7 +72,7 @@ export default class StickyLayout extends Component {
         };
 
         const heroImages = [sampleImage];
-        console.log("Hero images", heroImages);
+        // console.log("Hero images", heroImages);
         this.setState({ heroImage: heroImages });
       }
     }
@@ -86,7 +86,7 @@ export default class StickyLayout extends Component {
 
   /*
   This function splits up the data into usable objects. Split up into 4
-  paragraphs and two images if it can. Mutable images is the remaining images 
+  paragraphs and two images if it can. Mutable images is the remaining images
   not used to be placed at the bottom.
 */
   createParagraphs = () => {
@@ -98,7 +98,7 @@ export default class StickyLayout extends Component {
     } else {
       var paragraphBody = body.split(/[\r\n\t]+/gm);
     }
-    console.log("images", images);
+    // console.log("images", images);
     var fourParagraphs = [];
 
     if (mutableImages.length >= 2) {
@@ -111,7 +111,7 @@ export default class StickyLayout extends Component {
       if (lastIndex > 4) {
         lastIndex = 4;
       }
-      console.log("four paragraphs", paragraphBody.slice(i, i + lastIndex));
+      // console.log("four paragraphs", paragraphBody.slice(i, i + lastIndex));
       fourParagraphs.push(paragraphBody.slice(i, i + lastIndex));
     }
 
@@ -123,9 +123,9 @@ export default class StickyLayout extends Component {
       if (lastIndex > 2) {
         lastIndex = 2;
       }
-      console.log("images array", mutableImages);
+      // console.log("images array", mutableImages);
       twoImages.push(mutableImages.slice(i, i + lastIndex));
-      console.log("check for undefined", twoImages);
+      // console.log("check for undefined", twoImages);
     }
 
     const obj = [];
@@ -144,7 +144,7 @@ export default class StickyLayout extends Component {
       }
 
       obj.push(object);
-      console.log("objects", object);
+      // console.log("objects", object);
       return;
     });
 
@@ -219,7 +219,7 @@ export default class StickyLayout extends Component {
 
   renderHeader = () => {
     const { images, title, creator, page } = this.state.post;
-    console.log("heroImage length", this.state.heroImage.length);
+    // console.log("heroImage length", this.state.heroImage.length);
     if (images.length === 0) {
       if (this.state.heroImage.length === 1) {
         return (

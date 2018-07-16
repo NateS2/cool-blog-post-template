@@ -175,7 +175,7 @@ export default class StickyLayout extends Component {
       }
     }
 
-    console.log("basic object length", basicObject);
+    // console.log("basic object length", basicObject);
     return basicObject.map(objects => {
       const { paragraphs, images } = objects;
       if (images === undefined || images.length === 0) {
